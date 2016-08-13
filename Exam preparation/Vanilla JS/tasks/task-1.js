@@ -1,6 +1,6 @@
 function solve() {
   return function (selector, isCaseSensitive) {
-    console.log('jkhjh');
+    console.log('jkhjkhk');
   };
 }
 
