@@ -1,53 +1,96 @@
 function solve() {
   return function (selector, isCaseSensitive) {
-    var elem = document.querySelector(selector);
-    elem.className = 'items-control';
+    isCaseSensitive = isCaseSensitive || false;
+    var element = document.querySelector(selector);
+    element.className = 'items-control';
 
-    var divAdd = document.createElement('div');
-    divAdd.className = 'add-controls';
-    divAdd.innerHTML = 'Enter text';
+    var fragment = document.createDocumentFragment();
 
+    //ADD CONTROLS 
+    var labelAdd = document.createElement('label');
+    labelAdd.className = 'add-controls';
+    labelAdd.innerHTML = 'Enter text';
     var inputAdd = document.createElement('input');
-
     var btnAdd = document.createElement('button');
     btnAdd.className = 'button';
     btnAdd.innerHTML = 'Add';
+    var ulResult = document.createElement('ul');
+    ulResult.className = 'items-list';
+    var liResult = document.createElement('li');
+    liResult.className = 'list-item';
+    var btnResult = document.createElement('button');
+    btnResult.className = 'button';
+    btnResult.innerHTML = 'X';
+    var textLiResult = document.createElement('span');
 
-    var divSearch = document.createElement('div');
-    divSearch.className = 'search-controls';
-    divSearch.innerHTML = 'Search';
+    labelAdd.addEventListener('click', function (ev) {
+      var target = ev.target;
+      if (target.tagName === 'BUTTON') {
+        var text = target.previousElementSibling.value;
+        var newLiItem = liResult.cloneNode(true);
+        var newBtn = btnResult.cloneNode(true);
+        var newSpan = textLiResult.cloneNode(true);
+        newSpan.innerHTML = text;
+        newLiItem.appendChild(newBtn);
+        newLiItem.appendChild(newSpan);
+        ulResult.appendChild(newLiItem);
+      }
+    }, false);
 
+    // SEARCH CONTROLS
+    var labelSearch = document.createElement('label');
+    labelSearch.className = 'search-controls';
+    labelSearch.innerHTML = 'Search';
     var inputSearch = document.createElement('input');
 
-    divSearch.appendChild(inputSearch);
+    labelSearch.addEventListener('input', function (ev) {
+      var text = ev.target.value;
 
-    var divResult = document.createElement('div');
-    divResult.className = 'result-controls';
-
-    var ulAdd = document.createElement('ul');
-    ulAdd.classList = 'list-item';
-
-    btnAdd.addEventListener("click", function () {
-      var liAdd = document.createElement('li');
-      liAdd.className = 'list-item';
-      var btn = document.createElement('button');
-      btn.className = 'button';
-      btn.innerHTML = 'X';
-      liAdd.innerHTML = inputAdd.value;
-      ulAdd.appendChild(btn);
-      ulAdd.appendChild(liAdd);
-      btn.addEventListener('click', function () {
-        ulAdd.removeChild(btn);
-        ulAdd.removeChild(liAdd);
-      }, false);
+      var liChildren = ulResult.getElementsByTagName('li');
+      for (var i = 0, len = liChildren.length; i < len; i += 1) {
+        var currentLi = liChildren[i];
+        var header = currentLi.lastElementChild.innerHTML.trim();
+        if (isCaseSensitive) {
+          if (header.indexOf(text) >= 0) {
+            currentLi.style.display = '';
+          } else {
+            currentLi.style.display = 'none';
+          }
+        } else {
+          if (header.toLowerCase().indexOf(text.toLowerCase()) >= 0) {
+            currentLi.style.display = '';
+          }
+          else {
+            currentLi.style.display = 'none';
+          }
+        }
+      }
     }, false);
-    divAdd.appendChild(inputAdd);
-    divAdd.appendChild(btnAdd);
-    divResult.appendChild(ulAdd);
-    elem.appendChild(divAdd);
-    elem.appendChild(divSearch);
-    elem.appendChild(divResult);
+
+    // RESULT CONTROLS
+    var labelResult = document.createElement('label');
+    labelResult.className = 'result-controls';
+
+    ulResult.addEventListener('click', function (ev) {
+      var target = ev.target;
+      if (target.tagName === 'BUTTON') {
+        if (target.parentNode.className === 'list-item') {
+          target.parentNode.outerHTML = '';
+        }
+      }
+    }, false);
+
+    labelAdd.appendChild(inputAdd);
+    labelAdd.appendChild(btnAdd);
+    labelResult.appendChild(ulResult);
+    labelSearch.appendChild(inputSearch);
+
+    fragment.appendChild(labelAdd);
+    fragment.appendChild(labelSearch);
+    fragment.appendChild(labelResult);
+
+    element.appendChild(fragment);
   };
 }
 
-//module.exports = solve;
+module.exports = solve;
