@@ -28,7 +28,7 @@ document.getElementsByTagName('container')[0].innerHTML = gsmTemplate(data);
 
 function solve() {
     return function (selector) {
-        var template = '<div id="container">' +
+        var template = '<div class="container">' +
             '<h1>Animals</h1>' +
             '<ul class="animals-list">' +
             '{{#animals}}' +
