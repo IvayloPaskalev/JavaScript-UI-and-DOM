@@ -39,6 +39,8 @@ function solve() {
     }
 }
 
+// ES6 solution
+/*
 function solve() {
     return function(element, contents) {
         if (typeof element === 'string') {
@@ -69,3 +71,4 @@ function solve() {
         element.appendChild(docFragment);
     };
 };
+*/
