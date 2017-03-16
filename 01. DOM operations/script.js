@@ -38,3 +38,34 @@ function solve() {
         elem.appendChild(fragment);
     }
 }
+
+function solve() {
+    return function(element, contents) {
+        if (typeof element === 'string') {
+            element = document.getElementById(element);
+            if (!element) {
+                throw new Error();
+            }
+        } else {
+            element = element;
+        }
+
+        contents.forEach(x => {
+            if (typeof x !== 'number' && typeof x !== 'string') {
+                throw new Error();
+            }
+        })
+
+        element.innerHTML = '';
+        let div = document.createElement('div');
+        let newDiv;
+        let docFragment = document.createDocumentFragment();
+
+        contents.forEach(x => {
+            newDiv = div.cloneNode(true);
+            newDiv.innerHTML = x;
+            docFragment.appendChild(newDiv);
+        })
+        element.appendChild(docFragment);
+    };
+};
