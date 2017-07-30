@@ -64,6 +64,7 @@ function solve() {
             currentLi.style.display = 'none';
           }
         }
+        console.log(2);
       }
     }, false);
 
